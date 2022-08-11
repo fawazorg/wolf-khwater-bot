@@ -63,10 +63,7 @@ const stopAuto = async (gid) => {
 
 const updateLast = async (gid, kid) => {
   let group = await Group.findOne({ gid }).exec();
-  if (!group?.lastK) {
-    return;
-  }
-  group = addLastToArray(group.lastK, kid);
+  group = addLastToArray(group?.lastK ?? [], kid);
   await Group.findOneAndUpdate(
     { gid },
     { lastK: group },
