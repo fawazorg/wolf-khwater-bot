@@ -5,6 +5,10 @@ const COMMAND_TRIGGER = "command_admin_default";
 const COMMAND_RESPONSE = "message_admin_default";
 
 AdminDefault = async (api, command) => {
+  const isDeveloper = command.sourceSubscriberId === api.options.developerId;
+  if (!isDeveloper) {
+    return;
+  }
   await api
     .messaging()
     .sendMessage(

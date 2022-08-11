@@ -5,6 +5,10 @@ const COMMAND_TRIGGER = "command_admin_join";
 const COMMAND_RESPONSE = "message_admin_join";
 
 AdminJoin = async (api, command) => {
+  const isDeveloper = command.sourceSubscriberId === api.options.developerId;
+  if (!isDeveloper) {
+    return;
+  }
   if (!Validator.isValidNumber(command.argument)) {
     return;
   }

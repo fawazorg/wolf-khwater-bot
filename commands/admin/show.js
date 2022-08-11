@@ -7,6 +7,10 @@ const SHOW_FAIL = "message_show_fail";
 const SHOW_ERROR = "error_kid_must_be_number";
 
 AdminShow = async (api, command) => {
+  const isDeveloper = command.sourceSubscriberId === api.options.developerId;
+  if (!isDeveloper) {
+    return;
+  }
   if (!Validator.isValidNumber(command.argument)) {
     return await sendMessage(api, command, SHOW_ERROR);
   }

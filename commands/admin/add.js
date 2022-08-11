@@ -8,6 +8,10 @@ const ADD_FAIL = "command_add_fail";
 const ADD_ERROR = "error_text_between_15_and_255";
 
 AdminAdd = async (api, command) => {
+  const isDeveloper = command.sourceSubscriberId === api.options.developerId;
+  if (!isDeveloper) {
+    return;
+  }
   let text = command.argument;
   if (!(text.length >= 10 && text.length <= 255)) {
     return await sendMessage(api, command, ADD_ERROR);

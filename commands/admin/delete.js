@@ -8,6 +8,10 @@ const DELETE_FAIL = "message_delete_fail";
 const DELETE_ERROR = "error_kid_must_be_number";
 
 Delete = async (api, command) => {
+  const isDeveloper = command.sourceSubscriberId === api.options.developerId;
+  if (!isDeveloper) {
+    return;
+  }
   if (!Validator.isValidNumber(command.argument)) {
     return await sendMessage(api, command, DELETE_ERROR);
   }
