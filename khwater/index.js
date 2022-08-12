@@ -91,6 +91,7 @@ const addLastToArray = (arr = [], lastID) => {
 
 const isGroupHaveAuto = async (gid) => {
   const group = await Group.findOne({ gid });
+  if (!group) return false;
   return group.auto;
 };
 
