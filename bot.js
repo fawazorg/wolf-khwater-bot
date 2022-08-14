@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { WOLFBot } = require("wolf.js");
+const { startAllAuto } = require("./khwater");
 const api = new WOLFBot();
 require("dotenv").config();
 
@@ -24,6 +25,7 @@ db.once("open", () => {
 
 api.on("ready", async () => {
   console.log(`[*] - ${api.config.keyword} start.`);
+  await startAllAuto(api);
 });
 
 api.login(process.env.EMAIL, process.env.PASSWORD);

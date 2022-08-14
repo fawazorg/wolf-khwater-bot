@@ -1,7 +1,7 @@
-const { api } = require("../bot");
 const khwater = require("../models/khwater");
 const Group = require("../models/group");
 const Groups = new Map();
+let api = null;
 
 const addKhwater = async (text) => {
   let newKhwater = await khwater.create({ text });
@@ -29,8 +29,12 @@ const sendRandomKhwaterToGroup = async (gid) => {
   await updateLast(gid, k.kid);
   return await api.messaging().sendGroupMessage(gid, k.text);
 };
-const startAllAuto = async () => {
+const startAllAuto = async (bot) => {
+  api = bot;
   let groups = await Group.find({ auto: true }).exec();
+  if (groups.length <= 0) {
+    return;
+  }
   for (let i = 0; i < groups.length; i++) {
     const g = groups[i];
     await startGroupAuto(g.gid, g.duration);
@@ -38,7 +42,10 @@ const startAllAuto = async () => {
 };
 const startGroupAuto = async (gid, duration) => {
   const isAuto = await isGroupHaveAuto(gid);
-  if (isAuto) return false;
+  if (Groups.has(gid)) {
+    let g = Groups.get(gid);
+    clearInterval(g.autoID);
+  }
   let autoID = setInterval(sendRandomKhwaterToGroup, duration * 60 * 1000, gid);
   Groups.set(gid, { duration, autoID });
   await Group.findOneAndUpdate(
